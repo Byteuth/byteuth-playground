@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Physics</title>
+		<link href="styles.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id="slider-container" class="slidecontainer grid">
+			<div class="slider-section">
+				<div class="toggles">
+					<div class="slider-header">
+						<button id="button-birdEyePOV" class="ui-button selected">
+							Bird's Eye View
+						</button>
+						<button id="button-thirdPersonPOV" class="ui-button">
+							Third Person View
+						</button>
+					</div>
+					<div class="slider-header">
+						<p>Wireframe</p>
+						<label class="switch">
+							<input type="checkbox" id="wireframe-toggle" />
+							<span class="checkbox-slider"></span>
+						</label>
+					</div>
+					<div class="slider-header">
+						<p>shadow camera</p>
+						<label class="switch">
+							<input type="checkbox" id="shadowHelper-toggle" />
+							<span class="checkbox-slider"></span>
+						</label>
+					</div>
+					<div class="slider-header">
+						<p>light camera</p>
+						<label class="switch">
+							<input type="checkbox" id="directionalLightHelper-toggle" />
+							<span class="checkbox-slider"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="slider-section">
+				<div class="slider-header">
+					<p>Width</p>
+					<input class="input-value" id="width-value" readonly />
+				</div>
+				<div class="slider-slide">
+					<input
+						type="range"
+						min="1"
+						max="10"
+						value="1"
+						class="slider"
+						id="shape-width"
+					/>
+				</div>
+			</div>
+
+			<div class="slider-section">
+				<div class="slider-header">
+					<p>Height</p>
+					<input class="input-value" id="height-value" readonly />
+				</div>
+				<div class="slider-slide">
+					<input
+						type="range"
+						min="1"
+						max="10"
+						value="1"
+						class="slider"
+						id="shape-height"
+					/>
+				</div>
+			</div>
+
+			<div class="slider-section">
+				<div class="slider-header">
+					<p>Depth</p>
+					<input class="input-value" id="depth-value" readonly />
+				</div>
+				<div class="slider-slide">
+					<input
+						type="range"
+						min="1"
+						max="10"
+						value="1"
+						class="slider"
+						id="shape-depth"
+					/>
+				</div>
+			</div>
+
+			<div class="slider-section">
+				<div class="slider-header">
+					<p>Width Segment</p>
+					<input class="input-value" id="segment-width-value" readonly />
+				</div>
+				<div class="slider-slide">
+					<input
+						type="range"
+						min="1"
+						max="10"
+						value="1"
+						class="slider"
+						id="segment-width"
+					/>
+				</div>
+			</div>
+
+			<div class="slider-section">
+				<div class="slider-header">
+					<p>Height Segment</p>
+					<input class="input-value" id="segment-height-value" readonly />
+				</div>
+				<div class="slider-slide">
+					<input
+						type="range"
+						min="1"
+						max="10"
+						value="1"
+						class="slider"
+						id="segment-height"
+					/>
+				</div>
+			</div>
+
+			<div class="slider-section">
+				<div class="slider-header">
+					<p>Depth Segment</p>
+					<input class="input-value" id="segment-depth-value" readonly />
+				</div>
+				<div class="slider-slide">
+					<input
+						type="range"
+						min="1"
+						max="10"
+						value="1"
+						class="slider"
+						id="segment-depth"
+					/>
+				</div>
+			</div>
+		</div>
+		<script></script>
+	</body>
+</html>
+<script type="module" src="src/ui.js"></script>
+<script type="module" src="src/main.js"></script>
+<script type="module" src="src/camera.js"></script>

@@ -1,0 +1,8 @@
+Model Information:
+* title:	Cartoon Taxi
+* source:	https://sketchfab.com/3d-models/cartoon-taxi-24ce4b9a60d249e88c9a1715d11c11cf
+* author:	Llop (https://sketchfab.com/llopestepari)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

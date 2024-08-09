@@ -1,0 +1,17 @@
+{
+  "name": "playground1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "three": "^0.167.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
