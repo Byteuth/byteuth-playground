@@ -1,21 +1,21 @@
 import * as THREE from "three";
 
 function createLights(targetObject) {
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.7 );
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.9 );
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
 
     
-    directionalLight.position.set(30, 80, 30);
+    directionalLight.position.set(80, 80, 0);
     directionalLight.castShadow = true;
     directionalLight.shadow.bias = 0.0001;
-    directionalLight.shadow.mapSize.width = 1024;
-    directionalLight.shadow.mapSize.height = 1024;
-    directionalLight.shadow.camera.top = 14;
-	directionalLight.shadow.camera.bottom = -14;
-	directionalLight.shadow.camera.left = -14;
-	directionalLight.shadow.camera.right = 14;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.camera.top = 50;
+	directionalLight.shadow.camera.bottom =  -50;
+	directionalLight.shadow.camera.left = -50;
+	directionalLight.shadow.camera.right = 50;
 	directionalLight.shadow.camera.near = 40;
-	directionalLight.shadow.camera.far = 100;
+	directionalLight.shadow.camera.far = 160;
     directionalLight.target = targetObject
     
     const helper = {

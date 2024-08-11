@@ -1,6 +1,13 @@
 import * as THREE from "three";
-import { createCamera, } from "./camera";
-import { createBasicObject, createBasicCar } from "../models/basic-geometry";
+import * as CANNON from "cannon-es";
+import CannonDebugger from "cannon-es-debugger";
+import { createCamera } from "./camera";
+import {
+	createBasicObject,
+	createBasicCar,
+	createBasicHouse,
+	createNeighborhood,
+} from "../models/basic-geometry";
 import { createLights } from "./lights";
 import { calculateIdealLookAt, calculateOffset } from "./camera";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -26,13 +33,13 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 const playWindow = renderer.domElement;
 const camera = createCamera(playWindow);
-const axesHelper = new THREE.AxesHelper(10);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(10);
+// scene.add(axesHelper);
 
 const cube = createBasicObject("box1", "flat_green1");
 cube.castShadow = true;
 cube.receiveShadow = true;
-cube.position.y = 10;
+cube.position.y = 14;
 scene.add(cube);
 
 let wireframe;
@@ -42,7 +49,9 @@ ground.castShadow = false;
 ground.receiveShadow = true;
 scene.add(ground);
 
-let car;
+let car = new THREE.Object3D();
+let neighborhood;
+
 createBasicCar()
 	.then((loadedCar) => {
 		car = loadedCar;
@@ -54,13 +63,22 @@ createBasicCar()
 		console.error("Failed to load car model:", error);
 	});
 
+// createNeighborhood()
+// 	.then((loadedNeighborhood) => {
+// 		neighborhood = loadedNeighborhood;
+// 		scene.add(loadedNeighborhood);
+// 	})
+// 	.catch((error) => {
+// 		console.error("Failed to load Neighborhood model:", error);
+// 	});
+
 let moveBackward = false;
 let moveForward = false;
 let moveLeft = false;
 let moveRight = false;
 
 const velocity = new THREE.Vector3(0, 0, 0);
-const delta = 0.9;
+const delta = 0.2;
 const rotationSpeed = 0.02;
 
 function onKeyDown(event) {
@@ -102,12 +120,12 @@ scene.add(directionalLight, ambientLight);
 
 function updateShadowHelperToggle(showShadowHelper) {
 	helper.shadowHelper.visible = showShadowHelper;
-	scene.add(helper.shadowHelper)
+	scene.add(helper.shadowHelper);
 }
 
 function updateDirectLightHelperToggle(showDirectionalLightHelper) {
 	helper.directionalLightHelper.visible = showDirectionalLightHelper;
-	scene.add(helper.directionalLightHelper)
+	scene.add(helper.directionalLightHelper);
 }
 
 function updateCubeGeometry(
@@ -128,7 +146,7 @@ function updateCubeGeometry(
 		depthSegments
 	);
 
-	cube.geometry.dispose(); 
+	cube.geometry.dispose();
 	cube.geometry = newGeometry;
 
 	if (wireframe) {
@@ -151,8 +169,7 @@ function updateCubeGeometry(
 	}
 }
 
-
-const size = 600;
+const size = 100;
 const divisions = 9;
 
 const gridHelper = new THREE.GridHelper(size, divisions);
@@ -160,6 +177,40 @@ scene.add(gridHelper);
 
 let cameraMode;
 const controls = new OrbitControls(camera, playWindow);
+
+const physicsWorld = new CANNON.World({
+	gravity: new CANNON.Vec3(0, -9.82, 0),
+});
+const groundBody = new CANNON.Body({
+	type: CANNON.Body.STATIC,
+	shape: new CANNON.Plane(),
+});
+
+groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+physicsWorld.addBody(groundBody);
+
+const radius = 1;
+const sphereBody = new CANNON.Body({
+	mass: 8,
+	shape: new CANNON.Sphere(radius),
+});
+const squareBody = new CANNON.Body({
+	mass: 5,
+	shape: new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5)),
+});
+
+sphereBody.position.set(0, 7, 0);
+physicsWorld.addBody(sphereBody);
+
+squareBody.position.set(-0.5, 14, 0.5);
+physicsWorld.addBody(squareBody);
+
+const sphereGeometry = new THREE.SphereGeometry(radius);
+const sphereMaterial = new THREE.MeshNormalMaterial();
+const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+scene.add(sphereMesh);
+
+const cannonDebugger = new CannonDebugger(scene, physicsWorld, {});
 
 function animate() {
 	cube.rotation.x += 0.01;
@@ -181,6 +232,12 @@ function animate() {
 
 		car.translateY(carVelocity);
 	}
+	if (neighborhood) {
+		for (let i = 0; i < neighborhood.children.length; i++) {
+			neighborhood.children[i].rotation.x += 0.01;
+			neighborhood.children[i].rotation.y += 0.01;
+		}
+	}
 
 	if (cameraMode === "thirdperson") {
 		camera.position.copy(calculateOffset(car));
@@ -198,6 +255,14 @@ function animate() {
 		controls.enabled = true;
 		controls.update();
 	}
+
+	physicsWorld.fixedStep();
+	cannonDebugger.update();
+	cube.position.copy(squareBody.position);
+	cube.quaternion.copy(squareBody.quaternion);
+	sphereMesh.position.copy(sphereBody.position);
+	sphereMesh.quaternion.copy(sphereBody.quaternion);
+	// window.requestAnimationFrame(animate)
 	renderer.render(scene, camera);
 }
 
@@ -223,5 +288,3 @@ document
 document.getElementById("button-orbitalPOV").addEventListener("click", () => {
 	cameraMode = "default";
 });
-
-animate();

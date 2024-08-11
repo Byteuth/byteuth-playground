@@ -1,0 +1,11 @@
+Model Information:
+* title:	House portugal
+* source:	https://sketchfab.com/3d-models/house-portugal-bb4032eb0aa64dd797fbd7f83e0b6e1d
+* author:	bohdan.cooperation (https://sketchfab.com/bohdan.cooperation)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "House portugal" (https://sketchfab.com/3d-models/house-portugal-bb4032eb0aa64dd797fbd7f83e0b6e1d) by bohdan.cooperation (https://sketchfab.com/bohdan.cooperation) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

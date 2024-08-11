@@ -9,7 +9,9 @@ function createCamera(playWindow) {
 		0.1,
 		10000
 	);
-	camera.position.set(20, 61, 94)	
+	// camera.position.set(20, 61, 94)	
+		camera.position.set(10, 20, 10)	
+	
 
 	camera.lookAt(0, 10, 0);
 	return camera;
