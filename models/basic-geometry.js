@@ -35,7 +35,7 @@ function createBasicObject(geometryKey, materialKey, textureKey) {
 
 	const geometryCatalog = {
 		box1: new THREE.BoxGeometry(1, 1, 1),
-		box2: new THREE.BoxGeometry(1000, 0.1, 1000),
+		box2: new THREE.BoxGeometry(600, 0.1, 600),
 		plane1: new THREE.PlaneGeometry(10, 10),
 	};
 

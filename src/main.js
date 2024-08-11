@@ -1,12 +1,9 @@
 import * as THREE from "three";
-import { createCamera } from "./camera";
+import { createCamera, setActiveCamera } from "./camera";
 import { createBasicObject, createBasicCar } from "../models/basic-geometry";
 import { createLights } from "./lights";
-import {
-	calculateIdealLookAt,
-	calculateOffset,
-	setActiveCamera,
-} from "./camera";
+import { calculateIdealLookAt, calculateOffset } from "./camera";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.CubeTextureLoader()
@@ -164,15 +161,14 @@ function updateCubeGeometry(
 	scene.add(wireframe);
 }
 
-
-const size = 1000;
-const divisions = 20;
+const size = 600;
+const divisions = 9;
 
 const gridHelper = new THREE.GridHelper(size, divisions);
 scene.add(gridHelper);
 
-
-let cameraMode = 1;
+let cameraMode;
+const controls = new OrbitControls(camera, playWindow);
 
 function animate() {
 	cube.rotation.x += 0.01;
@@ -193,18 +189,23 @@ function animate() {
 		if (moveRight) car.rotation.z -= rotationSpeed;
 
 		car.translateY(carVelocity);
+	}
 
-		if (cameraMode === 1) {
-			camera.position.copy(calculateOffset(car));
-			camera.lookAt(calculateIdealLookAt(car));
-		} else if (cameraMode === 2) {
-			camera.position.set(
-				car.position.x - 10,
-				car.position.y + 5,
-				car.position.z + 10
-			);
-			camera.lookAt(car.position);
-		}
+	if (cameraMode === "thirdperson") {
+		camera.position.copy(calculateOffset(car));
+		camera.lookAt(calculateIdealLookAt(car));
+		controls.enabled = false;
+	} else if (cameraMode === "birdseye") {
+		camera.position.set(
+			car.position.x - 40,
+			car.position.y + 50,
+			car.position.z + 40
+		);
+		controls.enabled = false;
+		camera.lookAt(car.position);
+	} else if (cameraMode === "default") {
+		controls.enabled = true;
+		controls.update();
 	}
 
 	renderer.render(scene, camera);
@@ -219,5 +220,18 @@ export {
 document.addEventListener("keydown", onKeyDown, false);
 document.addEventListener("keyup", onKeyUp, false);
 
+document.getElementById("button-birdEyePOV").addEventListener("click", () => {
+	cameraMode = "birdseye";
+});
+
+document
+	.getElementById("button-thirdPersonPOV")
+	.addEventListener("click", () => {
+		cameraMode = "thirdperson";
+	});
+
+document.getElementById("button-orbitalPOV").addEventListener("click", () => {
+	cameraMode = "default";
+});
 
 animate();

@@ -23,6 +23,7 @@ const directionalLightHelperToggle = document.getElementById(
 	"directionalLightHelper-toggle"
 );
 
+
 let isWireframeEnabled = false;
 let isShadowHelperEnabled = false;
 let isDirectionalLightHelperEnabled = false;
@@ -132,16 +133,24 @@ segmentDepthSlider.oninput = function () {
 	);
 };
 
-document.getElementById("button-birdEyePOV").addEventListener("click", () => {
-	setActiveCamera("1");
-});
+document
+	.getElementById("button-birdEyePOV")
+	.addEventListener("click", () => {
+		setActiveCamera("birdseye");
+	});
 
 document
 	.getElementById("button-thirdPersonPOV")
 	.addEventListener("click", () => {
-		setActiveCamera("2");
+		setActiveCamera("thirdperson");
 	});
 
+document
+	.getElementById("button-orbitalPOV")
+	.addEventListener("click", () => {
+		setActiveCamera("default");
+	});
+	
 wireframeToggle.addEventListener("change", toggleWireframe);
 shadowHelperToggle.addEventListener("change", toggleShadowHelper);
 directionalLightHelperToggle.addEventListener(

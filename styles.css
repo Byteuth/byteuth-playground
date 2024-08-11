@@ -159,8 +159,8 @@ input:checked + .checkbox-slider:before {
 	margin-top: 3px;
 	margin-left: 3px;
 	margin-right: 3px;
+	height: 50px
 }
-
 
 .ui-button.selected {
 	background-color: #6fbf3d;
@@ -169,5 +169,3 @@ input:checked + .checkbox-slider:before {
 .ui-button.selected:hover {
 	background-color: rgb(125, 206, 50);
 }
-
-

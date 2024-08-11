@@ -1,16 +1,14 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-let cameraMode = 1;
+let cameraMode;
 
 function createCamera(playWindow) {
 	const camera = new THREE.PerspectiveCamera(
 		75,
 		window.innerWidth / window.innerHeight,
 		0.1,
-		1000
+		10000
 	);
-	const controls = new OrbitControls(camera, playWindow);
 	camera.position.set(0, 40, 30);
 	camera.lookAt(0, 10, 0);
 	return camera;
@@ -18,40 +16,60 @@ function createCamera(playWindow) {
 
 function calculateOffset(carModel) {
 	let offset;
-	if (cameraMode === 1) {
-		offset = new THREE.Vector3(10, -16, 30);
-	} else if (cameraMode === 2) {
+	if (cameraMode === "birdseye") {
+		offset.applyQuaternion(carModel.quaternion);
+		return carModel.position.clone().add(offset);
+		
+	} else if (cameraMode === "thirdperson") {
 		offset = new THREE.Vector3(0, -7, 7);
+		offset.applyQuaternion(carModel.quaternion);
+		return carModel.position.clone().add(offset);
+
+	} else if (cameraMode === "default") {
+		return new THREE.Vector3(100, 100, 100); 
 	}
-	offset.applyQuaternion(carModel.quaternion);
-	return carModel.position.clone().add(offset);
 }
 
 function calculateIdealLookAt(carModel) {
 	let lookAtOffset;
-	if (cameraMode === 1) {
-		lookAtOffset = new THREE.Vector3(0, 10, 14);
-	} else if (cameraMode === 2) {
+	if (cameraMode === "birdseye") {
+		lookAtOffset.applyQuaternion(carModel.quaternion);
+		return carModel.position.clone().add(lookAtOffset);
+
+	} else if (cameraMode === "thirdperson") {
 		lookAtOffset = new THREE.Vector3(0, 16, -2);
+		lookAtOffset.applyQuaternion(carModel.quaternion);
+		return carModel.position.clone().add(lookAtOffset);
+		
+	} else if (cameraMode === "default") {
+		return new THREE.Vector3(0, 0, 0);
 	}
-	lookAtOffset.applyQuaternion(carModel.quaternion);
-	return carModel.position.clone().add(lookAtOffset);
 }
 
 function setActiveCamera(mode) {
-	cameraMode = parseInt(mode, 10);
+	cameraMode = mode;
 	console.log("Camera mode set to:", cameraMode);
 
 	const birdEyeButton = document.getElementById("button-birdEyePOV");
 	const thirdPersonButton = document.getElementById("button-thirdPersonPOV");
+	const orbitalButton = document.getElementById("button-orbitalPOV");
 
-	if (cameraMode === 1) {
-		birdEyeButton.classList.add("selected");
-		thirdPersonButton.classList.remove("selected");
-	} else if (cameraMode === 2) {
+	if 	(cameraMode === "thirdperson") {
+		orbitalButton.classList.remove("selected");
 		birdEyeButton.classList.remove("selected");
 		thirdPersonButton.classList.add("selected");
+
+	} else if (cameraMode === "birdseye") {
+		orbitalButton.classList.remove("selected");
+		birdEyeButton.classList.add("selected");
+		thirdPersonButton.classList.remove("selected");
+		
+	} else if (cameraMode === "default") {
+		orbitalButton.classList.add("selected");
+		birdEyeButton.classList.remove("selected");
+		thirdPersonButton.classList.remove("selected");
 	}
+	return mode
 }
 
 export { createCamera, calculateOffset, calculateIdealLookAt, setActiveCamera };
