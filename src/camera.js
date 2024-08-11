@@ -9,7 +9,8 @@ function createCamera(playWindow) {
 		0.1,
 		10000
 	);
-	camera.position.set(0, 40, 30);
+	camera.position.set(20, 61, 94)	
+
 	camera.lookAt(0, 10, 0);
 	return camera;
 }
@@ -42,7 +43,7 @@ function calculateIdealLookAt(carModel) {
 		return carModel.position.clone().add(lookAtOffset);
 		
 	} else if (cameraMode === "default") {
-		return new THREE.Vector3(0, 0, 0);
+		return new THREE.Vector3(100, 100, 100); 
 	}
 }
 
@@ -63,7 +64,7 @@ function setActiveCamera(mode) {
 		orbitalButton.classList.remove("selected");
 		birdEyeButton.classList.add("selected");
 		thirdPersonButton.classList.remove("selected");
-		
+
 	} else if (cameraMode === "default") {
 		orbitalButton.classList.add("selected");
 		birdEyeButton.classList.remove("selected");

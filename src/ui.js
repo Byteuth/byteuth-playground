@@ -150,7 +150,7 @@ document
 	.addEventListener("click", () => {
 		setActiveCamera("default");
 	});
-	
+
 wireframeToggle.addEventListener("change", toggleWireframe);
 shadowHelperToggle.addEventListener("change", toggleShadowHelper);
 directionalLightHelperToggle.addEventListener(

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { createCamera, setActiveCamera } from "./camera";
+import { createCamera, } from "./camera";
 import { createBasicObject, createBasicCar } from "../models/basic-geometry";
 import { createLights } from "./lights";
 import { calculateIdealLookAt, calculateOffset } from "./camera";
@@ -101,13 +101,13 @@ const { directionalLight, ambientLight, helper } = createLights(cube);
 scene.add(directionalLight, ambientLight);
 
 function updateShadowHelperToggle(showShadowHelper) {
-	if (showShadowHelper) scene.add(helper.shadowHelper);
-	else scene.remove(helper.shadowHelper);
+	helper.shadowHelper.visible = showShadowHelper;
+	scene.add(helper.shadowHelper)
 }
 
 function updateDirectLightHelperToggle(showDirectionalLightHelper) {
-	if (showDirectionalLightHelper) scene.add(helper.directionalLightHelper);
-	else scene.remove(helper.directionalLightHelper);
+	helper.directionalLightHelper.visible = showDirectionalLightHelper;
+	scene.add(helper.directionalLightHelper)
 }
 
 function updateCubeGeometry(
@@ -119,7 +119,7 @@ function updateCubeGeometry(
 	depthSegments,
 	showWireframe
 ) {
-	const geometry = new THREE.BoxGeometry(
+	const newGeometry = new THREE.BoxGeometry(
 		width,
 		height,
 		depth,
@@ -128,38 +128,29 @@ function updateCubeGeometry(
 		depthSegments
 	);
 
-	const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-	scene.remove(cube);
-	cube.geometry.dispose();
+	cube.geometry.dispose(); 
+	cube.geometry = newGeometry;
 
-	cube.geometry = geometry;
-	cube.material = material;
-
-	cube.castShadow = true;
-	cube.receiveShadow = true;
-
-	scene.add(cube);
-
-	if (showWireframe) {
-		if (wireframe) {
-			scene.remove(wireframe);
-			wireframe.geometry.dispose();
-		}
-		const wireframemat = new THREE.LineBasicMaterial({ color: 0xffffff });
-		wireframe = new THREE.LineSegments(
-			new THREE.WireframeGeometry(geometry),
-			wireframemat
-		);
-		wireframe.position.copy(cube.position);
-		scene.add(wireframe);
-	} else if (wireframe) {
+	if (wireframe) {
 		scene.remove(wireframe);
 		wireframe.geometry.dispose();
 		wireframe = null;
 	}
 
-	scene.add(wireframe);
+	if (showWireframe) {
+		const wireframeGeometry = new THREE.WireframeGeometry(newGeometry);
+		const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+		wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+		wireframe.position.copy(cube.position);
+		wireframe.rotation.copy(cube.rotation);
+		scene.add(wireframe);
+	}
+
+	if (!scene.children.includes(cube)) {
+		scene.add(cube);
+	}
 }
+
 
 const size = 600;
 const divisions = 9;
@@ -207,7 +198,6 @@ function animate() {
 		controls.enabled = true;
 		controls.update();
 	}
-
 	renderer.render(scene, camera);
 }
 

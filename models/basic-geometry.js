@@ -51,8 +51,8 @@ function createBasicObject(geometryKey, materialKey, textureKey) {
 	const geometry = geometryCatalog[geometryKey];
 	const material = materialCatalog[materialKey];
 	material.wireframe = false;
-
 	const mesh = new THREE.Mesh(geometry, material);
+	// console.log(mesh)
 	return mesh;
 }
 
