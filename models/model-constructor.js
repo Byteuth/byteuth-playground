@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-export const createBasicObject = async ({
+export const createBasicMesh = async ({
 	position,
 	scale,
 	shape,
@@ -47,7 +47,7 @@ export const createBasicObject = async ({
 };
 
 const loader = new GLTFLoader();
-export const createBasicCar = ({ position, scale, shadows }) => {
+export const createGLTFMesh = ({ position, scale, shadows }) => {
 	return new Promise((resolve, reject) => {
 		loader.load(
 			"./models/textures/gltf/cars/scene.gltf",
@@ -62,8 +62,9 @@ export const createBasicCar = ({ position, scale, shadows }) => {
 
 				const mesh = gltf.scene.children[0];
 				mesh.position.set(position.x, position.y, position.z);
-				mesh.scale.multiplyScalar(scale)
-				mesh.children[0].rotation.y = 1.53
+				mesh.scale.set(scale.x, scale.y, scale.z),
+					(mesh.children[0].rotation.y = 1.53);
+
 				resolve(mesh);
 			},
 			undefined,
@@ -73,60 +74,3 @@ export const createBasicCar = ({ position, scale, shadows }) => {
 		);
 	});
 };
-
-function createBasicHouse() {
-	let houseModel;
-	return new Promise((resolve, reject) => {
-		const loader = new GLTFLoader();
-		loader.load(
-			"./models/textures/gltf/houses/scene.gltf",
-			(gltf) => {
-				gltf.scene.traverse(function (child) {
-					if (child.isMesh) {
-						child.castShadow = true;
-						child.receiveShadow = true;
-						child.geometry.computeVertexNormals();
-					}
-				});
-				houseModel = gltf.scene.children[0];
-				// houseModel.position.set(-24, 0.4, -30);
-				houseModel.scale.set(2, 2, 2);
-				// houseModel.rotation.z = .4
-				resolve(houseModel);
-			},
-			undefined,
-			(error) => {
-				console.error(
-					"An error happened while loading the house model:",
-					error
-				);
-				reject(error);
-			}
-		);
-	});
-}
-
-async function createNeighborhood() {
-	const neighborhood = new THREE.Group();
-	for (let i = 0; i < 100; i++) {
-		const angle = Math.random() * Math.PI * 2;
-		const maxRadius = 10;
-		const minRadius = 50;
-		const radius = minRadius + Math.random() * (maxRadius - minRadius);
-		const x = Math.sin(angle) * radius;
-		const z = Math.cos(angle) * radius;
-
-		const house = await createBasicObject("box1", "flat_green1");
-		house.position.x = x;
-		house.position.z = z;
-		house.position.y = 2;
-
-		house.rotation.z = Math.random();
-		house.rotation.y = Math.random() * 0.1;
-		neighborhood.add(house);
-	}
-
-	return neighborhood;
-}
-
-export { createBasicHouse, createNeighborhood };
